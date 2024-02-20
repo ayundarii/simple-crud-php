@@ -10,10 +10,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
     $productController = new ProductController();
     $listId = $_POST['selected_products'];
     if ($productController->recoverProducts($listId)) {
-        header("Location: ../index.php");
+        header("Location: ../index.php?message=Succesfully+recovered+products.");
         exit;
     } else {
-        $message = "Failed to recovery products.";
+        $message = "Failed to recover products.";
     }
 } elseif ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['selected_products'])) {
     $message = "No products selected for recovery."; 
