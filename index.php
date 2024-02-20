@@ -105,7 +105,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
         </tr>
         <?php else : ?>
             <tr>
-                <td colspan="5">0 results</td>
+                <td colspan="8">0 results</td>
             </tr>
         <?php endif ?>
     </table>
