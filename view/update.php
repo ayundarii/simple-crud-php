@@ -1,23 +1,34 @@
 <?php
-include('../config/db.php');
+include('../config/init.php');
+include PROJECT_ROOT . '/controller/productController.php';
 
-$id = $_GET['id'];
+if(isset($_GET['id'])) {
+    $id = $_GET['id'];
 
-try{
-    $stmt = $conn->prepare("SELECT * FROM products WHERE id = :id");
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+    $productController = new ProductController();
 
-    $row = [];
+    $product = $productController->getProductById($id);
 
-    if($stmt->rowCount() > 0){
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    } 
-} catch (PDOException $e) {
-    echo "Error: ".$e->getMessage();
+    if($product) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $data = array(
+                'product_name' => $_POST['product_name'],
+                'price' => $_POST['price'],
+                'quantity' => $_POST['quantity'],
+                'description' => $_POST['description']
+            );
+            
+            if($productController->updateProduct($id, $data)){
+                header('Location: ../index.php?message=Product+updated+successfully');
+                exit;
+            } else {
+                $message = "Failed to update product.";
+            }
+        }
+    } else {
+        $message = "Product not found."; 
+    }
 }
-
-$conn = null
 ?>
 
 <!DOCTYPE html>
@@ -29,24 +40,28 @@ $conn = null
 </head>
 <body>
     <h2>Update Product</h2>
+    <?php if (!empty($message)) : ?> 
+        <p><?php echo $message; ?></p>
+    <?php endif; ?>
     <a href="../index.php">Back to Product List</a>
     <br><br>
-    <?php if(count($row) > 0) : ?>
-        <form action="../controller/update.php" method="post">
-            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+        <?php if($product) : ?>
+        <form action="" method="post">
+            <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
             <label for="product_name">Product Name:</label>
-            <input type="text" name="product_name" value="<?php echo $row['product_name']; ?>" required>
+            <input type="text" name="product_name" value="<?php echo $product['product_name']; ?>" required>
             <br>
             <label for="price">Price:</label>
-            <input type="number" name="price" value="<?php echo $row['price']; ?>" required>
+            <input type="number" name="price" value="<?php echo $product['price']; ?>" required>
             <br>
             <label for="quantity">Quantity:</label>
-            <input type="number" name="quantity" value="<?php echo $row['quantity']; ?>" required>
+            <input type="number" name="quantity" value="<?php echo $product['quantity']; ?>" required>
+            <br>
+            <label for="description">Description:</label>
+            <input type="text" name="description" value="<?php echo $product['description']; ?>" required>
             <br>
             <input type="submit" value="Update Product">
         </form>
-    <?php else : ?>
-        <p>Data not found</p>
-    <?php endif ?>
+        <?php endif; ?>
 </body>
 </html>

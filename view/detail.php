@@ -1,23 +1,14 @@
 <?php
-include('../config/db.php');
+include '../config/init.php';
+include PROJECT_ROOT . '/controller/productController.php';
 
 $id = $_GET['id'];
 
-try{
-    $stmt = $conn->prepare("SELECT * FROM products WHERE id = :id");
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+$productController = new ProductController();
 
-    $row = [];
-
-    if($stmt->rowCount() > 0){
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    } 
-} catch (PDOException $e) {
-    echo "Error: ".$e->getMessage();
+if($id !== null) {
+    $product = $productController->getProductById($id);
 }
-
-$conn = null
 ?>
 
 <!DOCTYPE html>
@@ -32,27 +23,27 @@ $conn = null
     <a href="../index.php">Back to Product List</a>
     <br><br>
 
-    <?php if (count($row) > 0) : ?>
         <table>
             <tr>
                 <td>ID:</td>
-                <td><?php echo $row["id"]; ?></td>
+                <td><?php echo $product["id"]; ?></td>
             </tr>
             <tr>
                 <td>Product Name:</td>
-                <td><?php echo $row["product_name"]; ?></td>
+                <td><?php echo $product["product_name"]; ?></td>
             </tr>
             <tr>
                 <td>Price:</td>
-                <td><?php echo $row["price"]; ?></td>
+                <td><?php echo $product["price"]; ?></td>
             </tr>
             <tr>
                 <td>Quantity:</td>
-                <td><?php echo $row["quantity"]; ?></td>
+                <td><?php echo $product["quantity"]; ?></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><?php echo $product["description"]; ?></td>
             </tr>
         </table>
-    <?php else : ?>
-        <p>0 Results</p>
-    <?php endif ?>
 </body>
 </html>
