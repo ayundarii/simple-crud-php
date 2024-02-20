@@ -89,7 +89,7 @@ include PROJECT_ROOT . '/config/config.php';
             $this->conn = null;
         }
 
-        public function recoverData($listIds){
+        public function restoreData($listIds){
             try {
                 $placeholders = implode(',', array_fill(0, count($listIds), '?'));
                 $stmt = $this->conn->prepare("UPDATE products SET is_deleted = 0 WHERE id IN ($placeholders)");

@@ -36,8 +36,8 @@
             return $this->model->multipleDelete($ids);
         }
 
-        public function recoverProducts($ids) {
-            return $this->model->recoverProducts($ids);
+        public function restoreData($ids) {
+            return $this->model->restoreData($ids);
         }
     }
 ?>

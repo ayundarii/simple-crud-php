@@ -46,8 +46,8 @@ include PROJECT_ROOT . '/database/database.php';
             return $this->db->multipleDelete($ids);
         }
 
-        public function recoverProducts($ids) {
-            return $this->db->recoverData($ids);
+        public function restoreData($ids) {
+            return $this->db->restoreData($ids);
         }
     }
 

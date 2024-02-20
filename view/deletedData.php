@@ -9,8 +9,8 @@ $message = "";
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
     $productController = new ProductController();
     $listId = $_POST['selected_products'];
-    if ($productController->recoverProducts($listId)) {
-        header("Location: ../index.php?message=Succesfully+recovered+products.");
+    if ($productController->restoreData($listId)) {
+        header("Location: ../index.php?message=Succesfully+restored+products.");
         exit;
     } else {
         $message = "Failed to recover products.";
@@ -77,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
         <?php endforeach ?>
         <tr>
             <td colspan="7">
-                <button type="submit" class="recover-button">Recover Selected Products</button>
+                <button type="submit" class="restore-button">Restore Selected Products</button>
             </td>
         </tr>
         <?php else : ?>
