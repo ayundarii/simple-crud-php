@@ -3,13 +3,7 @@ include PROJECT_ROOT . '/database/database.php';
 
 //preparasi kolom dan data yg didpatkan di controller, database evaluate data
     class Product {
-        // private $controller = new ProductController;
         private $db;
-
-        private $product_name;
-        private $price;
-        private $quantity;
-        private $description;
 
         public function __construct() {
             $this->db = new Database();
