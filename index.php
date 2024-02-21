@@ -51,9 +51,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
     <h2>Product List</h2>
     <a href="view/create.php">Add Product</a>
     <a href="view/deletedData.php">Recover Deleted Products</a>
-    <?php if (isset($_GET['message'])) : ?> 
-        <p><?php echo '<script>alert("'. htmlspecialchars($_GET['message']).'")</script>';?></p>
-    <?php endif; ?>
     <br><br>
     <form action="" method="post">
     <table>
@@ -106,5 +103,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
         <?php endif ?>
     </table>
     </form>
+    <?php if (isset($_GET['message'])) : ?> 
+        <p><?php echo '<script>alert("'. htmlspecialchars($_GET['message']).'")</script>';?></p>
+    <?php endif; ?>
 </body>
 </html>
