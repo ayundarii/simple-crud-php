@@ -8,36 +8,39 @@
             $this->model = new Product();
         }
 
-        public function createProduct($data) {
-            return $this->model->createProduct($data);
+        public function createProduct($data, $table) {
+            if (empty($data) || !is_array($data)) {
+                return false;
+            }
+            return $this->model->createProduct($data, $table);
         }
 
-        public function getProducts() {
-            return $this->model->getProducts();
+        public function getProducts($table) {
+            return $this->model->getProducts($table);
         }
 
-        public function getDeletedProducts() {
-            return $this->model->getDeletedProducts();
+        public function getDeletedProducts($table) {
+            return $this->model->getDeletedProducts($table);
         }
         
-        public function getProductById($id) {
-            return $this->model->getProductById($id);
+        public function getProductById($id, $table) {
+            return $this->model->getProductById($id, $table);
         }
     
-        public function updateProduct($id, $data) {
-            return $this->model->updateProduct($id, $data);
+        public function updateProduct($id, $data, $table) {
+            return $this->model->updateProduct($id, $data, $table);
         }
     
-        public function deleteProduct($id) {
-            return $this->model->softDelete($id);
+        public function deleteProduct($id, $table) {
+            return $this->model->softDelete($id, $table);
         }
 
-        public function deleteMultipleProducts($ids) {
-            return $this->model->multipleDelete($ids);
+        public function deleteMultipleProducts($ids, $table) {
+            return $this->model->multipleDelete($ids, $table);
         }
 
-        public function restoreData($ids) {
-            return $this->model->restoreData($ids);
+        public function restoreData($ids, $table) {
+            return $this->model->restoreData($ids, $table);
         }
     }
 ?>

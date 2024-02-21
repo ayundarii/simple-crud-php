@@ -7,7 +7,7 @@ if(isset($_GET['id'])) {
 
     $productController = new ProductController();
 
-    $product = $productController->getProductById($id);
+    $product = $productController->getProductById($id, TABLE_NAME);
 
     if($product) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,7 +18,7 @@ if(isset($_GET['id'])) {
                 'description' => $_POST['description']
             );
             
-            if($productController->updateProduct($id, $data)){
+            if($productController->updateProduct($id, $data, TABLE_NAME)){
                 header('Location: ../index.php?message=Product+updated+successfully');
                 exit;
             } else {

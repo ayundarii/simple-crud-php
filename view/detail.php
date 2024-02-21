@@ -7,7 +7,7 @@ $id = $_GET['id'];
 $productController = new ProductController();
 
 if($id !== null) {
-    $product = $productController->getProductById($id);
+    $product = $productController->getProductById($id, TABLE_NAME);
 }
 ?>
 
@@ -22,7 +22,6 @@ if($id !== null) {
     <h2>Product Details</h2>
     <a href="../index.php">Back to Product List</a>
     <br><br>
-
         <table>
             <tr>
                 <td>ID:</td>

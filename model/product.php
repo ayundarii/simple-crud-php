@@ -9,39 +9,32 @@ include PROJECT_ROOT . '/database/database.php';
             $this->db = new Database();
         }
     
-        public function getProducts(){
-            return $this->db->getProducts();
+        public function getProducts($table){
+            return $this->db->getProducts($table);
         }
 
-        public function getDeletedProducts(){
-            return $this->db->deletedDatas();
+        public function getDeletedProducts($table){
+            return $this->db->deletedDatas($table);
         }
         
-        public function createProduct($data) {
-            if (empty($data) || !is_array($data)) {
-                return false;
-            }
-            return $this->db->create($data);
+        public function createProduct($data, $table) {
+            return $this->db->create($data, $table);
         }
     
-        public function getProductById($id) {
-            return $this->db->getProductsById($id);
+        public function getProductById($id, $table) {
+            return $this->db->getProductsById($id, $table);
         }
     
-        public function updateProduct($id, $data) {
-            return $this->db->update($id, $data);
-        }
-    
-        public function softDelete($id) {
-            return $this->db->softDelete($id);
+        public function updateProduct($id, $data, $table) {
+            return $this->db->update($id, $data, $table);
         }
 
-        public function multipleDelete($ids) {
-            return $this->db->multipleDelete($ids);
+        public function multipleDelete($ids, $table) {
+            return $this->db->multipleDelete($ids, $table);
         }
 
-        public function restoreData($ids) {
-            return $this->db->restoreData($ids);
+        public function restoreData($ids, $table) {
+            return $this->db->restoreData($ids, $table);
         }
     }
 

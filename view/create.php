@@ -4,13 +4,21 @@ include PROJECT_ROOT . '/controller/productController.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $productController = new ProductController();
+    
+    if (empty($_POST["product_name"])) {
+        $message = "Please add product name.";
+    }
+
     $data = array(
         'product_name' => $_POST['product_name'],
         'price' => $_POST['price'],
         'quantity' => $_POST['quantity'],
         'description' => $_POST['description']
     );
-    if ($productController->createProduct($data))  {
+
+    //validasi
+
+    if ($productController->createProduct($data, TABLE_NAME))  {
         $message = "Product added successfully.";
         header("Location: ../index.php?message=Product+created+successfully");
         exit();

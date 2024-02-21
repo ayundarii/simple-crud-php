@@ -3,7 +3,7 @@ include 'config/init.php';
 include PROJECT_ROOT . '/controller/productController.php';
 
 $controller = new ProductController();
-$products = $controller->getProducts();
+$products = $controller->getProducts(TABLE_NAME);
 $message = "";
 
 $totalPrice = 0;
@@ -15,7 +15,7 @@ foreach ($products as $product) {
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
     $productController = new ProductController();
     $listId = $_POST['selected_products'];
-    if ($productController->deleteMultipleProducts($listId)) {
+    if ($productController->deleteMultipleProducts($listId, TABLE_NAME)) {
         header("Location: index.php?message=Succesfully+deleted+products.");
         exit;
     } else {

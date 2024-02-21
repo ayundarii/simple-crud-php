@@ -6,8 +6,8 @@ $productController = new ProductController();
 
 $id = $_GET['id'];
 
-$product = $productController->getProductById($id);
-if($productController->deleteProduct($id)){
+$product = $productController->getProductById($id, TABLE_NAME);
+if($productController->deleteMultipleProducts([$id], TABLE_NAME)){
     header("Location: ../index.php?message=Product+succesfully+deleted.");
     exit; 
 }
