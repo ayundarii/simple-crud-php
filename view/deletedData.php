@@ -97,15 +97,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </tr>
         <?php endif ?>
     </table>
+    <?php if (count($products) > 0) : ?>
     <tr>
-            <td>
-                <button type="submit" class="restore-button">Restore Selected Products</button>
-            </td>
-            <td>
-                <button type="submit" class="restore-all-button">Restore All Products</button>
-                <input type="hidden" name="restore-all-button" value="1">
-            </td>
-        </tr>
+        <td>
+            <button type="submit" class="restore-button">Restore Selected Products</button>
+        </td>
+        <td>
+            <button type="submit" class="restore-all-button">Restore All Products</button>
+            <input type="hidden" name="restore-all-button" value="1">
+        </td>
+    </tr>
+    <?php endif ?>
     </form>
 </body>
 </html>
