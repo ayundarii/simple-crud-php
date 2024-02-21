@@ -6,10 +6,25 @@ $productController = new ProductController();
 
 $id = $_GET['id'];
 
+// Validate ID
+if (empty($id)) {
+    header("Location: ../index.php?message=Product+ID+not+provided.");
+    exit;
+} elseif (!is_numeric($id) || $id <= 0) {
+    header("Location: ../index.php?message=Invalid+Product+ID.");
+    exit;
+}
+
+// Check if product exists before attempting deletion
 $product = $productController->getProductById($id, TABLE_NAME);
-if($productController->deleteMultipleProducts([$id], TABLE_NAME)){
-    header("Location: ../index.php?message=Product+succesfully+deleted.");
-    exit; 
+if (!$product) {
+    header("Location: ../index.php?message=Product+not+found.");
+    exit;
+} else {
+    if ($productController->deleteMultipleProducts([$id], TABLE_NAME)) {
+        header("Location: ../index.php?message=Product+succesfully+deleted.");
+        exit;
+    }
 }
 ?>
 

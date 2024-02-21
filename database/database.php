@@ -61,20 +61,6 @@ include PROJECT_ROOT . '/config/config.php';
             }
         }
 
-        public function delete($id, $table) {
-            try{
-                $stmt = $this->conn->prepare("DELETE FROM $table WHERE id = :id");
-                $stmt->bindParam(':id', $id);
-                $stmt->execute([$id]);
-                return true;
-            } catch (PDOException $e) {
-                echo "Error deleting product: ".$e->getMessage();
-                return false;
-            }
-            
-            $this->conn = null;
-        }
-
         public function restoreData($listIds, $table){
             try {
                 $placeholders = implode(',', array_fill(0, count($listIds), '?'));

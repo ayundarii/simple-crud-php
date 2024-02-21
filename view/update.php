@@ -6,27 +6,51 @@ if(isset($_GET['id'])) {
     $id = $_GET['id'];
 
     $productController = new ProductController();
-
     $product = $productController->getProductById($id, TABLE_NAME);
 
     if($product) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $data = array(
-                'product_name' => $_POST['product_name'],
-                'price' => $_POST['price'],
-                'quantity' => $_POST['quantity'],
-                'description' => $_POST['description']
-            );
-            
-            if($productController->updateProduct($id, $data, TABLE_NAME)){
-                header('Location: ../index.php?message=Product+updated+successfully');
-                exit;
-            } else {
-                $message = "Failed to update product.";
+            $errors = [];
+            // Validate product name
+            if (empty($_POST["product_name"])) {
+                $errors[] = "Product name is required.";
+            }
+
+            // Validate price
+            if (empty($_POST["price"])) {
+                $errors[] = "Price is required.";
+            } elseif (!is_numeric($_POST["price"]) || $_POST["price"] <= 0) {
+                $errors[] = "Price must be a positive number.";
+            }
+
+            // Validate quantity
+            if (!is_numeric($_POST["quantity"]) || $_POST["quantity"] < 0) {
+                $errors[] = "Quantity must be a non-negative number.";
+            } 
+
+            // Validate description (description can be empty)
+            if (!empty($_POST["description"]) && strlen($_POST["description"]) > 255) {
+                $errors[] = "Description must be less than 255 characters.";
+            }
+
+            if (empty($errors)) {
+                $data = array(
+                    'product_name' => $_POST['product_name'],
+                    'price' => $_POST['price'],
+                    'quantity' => $_POST['quantity'],
+                    'description' => $_POST['description']
+                );
+                
+                if($productController->updateProduct($id, $data, TABLE_NAME)){
+                    header('Location: ../index.php?message=Product+updated+successfully');
+                    exit;
+                } else {
+                    $message = "Failed to update product.";
+                }
             }
         }
     } else {
-        $message = "Product not found."; 
+        $errors[] = "Product not found."; 
     }
 }
 ?>
@@ -40,8 +64,13 @@ if(isset($_GET['id'])) {
 </head>
 <body>
     <h2>Update Product</h2>
-    <?php if (!empty($message)) : ?> 
-        <p><?php echo $message; ?></p>
+    <?php if (!empty($errors)) : ?>
+        <ul>
+            <h4>Please pay attention to these criterias:</h4>
+            <?php foreach ($errors as $error) : ?>
+                <li><?php echo $error; ?></li>
+            <?php endforeach; ?>
+        </ul>
     <?php endif; ?>
     <a href="../index.php">Back to Product List</a>
     <br><br>
