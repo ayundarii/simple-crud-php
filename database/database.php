@@ -100,6 +100,7 @@ include PROJECT_ROOT . '/config/config.php';
                 foreach ($data as $key => $column) {
                     $stmt->bindValue(":$key", $column);
                 }
+                
                 $stmt->bindParam(":id", $id);
                 $stmt->execute();
                 return true;

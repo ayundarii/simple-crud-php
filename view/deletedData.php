@@ -6,17 +6,33 @@ $controller = new ProductController();
 $products = $controller->getDeletedProducts(TABLE_NAME, 'is_deleted');
 $message = "";
 
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
-    $productController = new ProductController();
-    $listId = $_POST['selected_products'];
-    if ($productController->restoreData($listId, TABLE_NAME, 'is_deleted')) {
-        header("Location: ../index.php?message=Succesfully+restored+products.");
-        exit;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check for either "selected_products" or "restore_all_button"
+    if (isset($_POST['selected_products'])) {
+        // Restore selected products
+        $listId = $_POST['selected_products'];
+        if ($controller->restoreData($listId, TABLE_NAME, 'is_deleted')) {
+            header("Location: ../index.php?message=Successfully+restored+products.");
+            exit;
+        } else {
+            $message = "Failed to recover selected products.";
+        }
+    } elseif (isset($_POST['restore-all-button'])) {
+        // Restore all products
+        // Get all product IDs
+        $listId = array_map(function ($product) {
+            return $product['id'];
+        }, $products);
+
+        if ($controller->restoreData($listId, TABLE_NAME, 'is_deleted')) {
+            header("Location: ../index.php?message=Successfully+restored+all+products.");
+            exit;
+        } else {
+            $message = "Failed to restore all products.";
+        }
     } else {
-        $message = "Failed to recover products.";
+        $message = "No products selected for recovery.";
     }
-} elseif ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['selected_products'])) {
-    $message = "No products selected for recovery."; 
 }
 ?>
 
@@ -75,17 +91,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
             </tr>
             <?php $counter++ ?>
         <?php endforeach ?>
-        <tr>
-            <td colspan="7">
-                <button type="submit" class="restore-button">Restore Selected Products</button>
-            </td>
-        </tr>
         <?php else : ?>
             <tr>
                 <td colspan="6">0 results</td>
             </tr>
         <?php endif ?>
     </table>
+    <tr>
+            <td>
+                <button type="submit" class="restore-button">Restore Selected Products</button>
+            </td>
+            <td>
+                <button type="submit" class="restore-all-button">Restore All Products</button>
+                <input type="hidden" name="restore-all-button" value="1">
+            </td>
+        </tr>
     </form>
 </body>
 </html>
