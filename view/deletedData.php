@@ -3,13 +3,13 @@ include '../config/init.php';
 include PROJECT_ROOT . '/controller/productController.php';
 
 $controller = new ProductController();
-$products = $controller->getDeletedProducts(TABLE_NAME);
+$products = $controller->getDeletedProducts(TABLE_NAME, 'is_deleted');
 $message = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
     $productController = new ProductController();
     $listId = $_POST['selected_products'];
-    if ($productController->restoreData($listId, TABLE_NAME)) {
+    if ($productController->restoreData($listId, TABLE_NAME, 'is_deleted')) {
         header("Location: ../index.php?message=Succesfully+restored+products.");
         exit;
     } else {

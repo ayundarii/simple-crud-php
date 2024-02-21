@@ -21,7 +21,7 @@ if (!$product) {
     header("Location: ../index.php?message=Product+not+found.");
     exit;
 } else {
-    if ($productController->deleteMultipleProducts([$id], TABLE_NAME)) {
+    if ($productController->deleteMultipleProducts([$id], TABLE_NAME, 'is_deleted')) {
         header("Location: ../index.php?message=Product+succesfully+deleted.");
         exit;
     }

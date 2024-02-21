@@ -6,32 +6,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $productController = new ProductController();
     $errors = [];
 
-    // Validate product name
+    // validasi product name
     if (empty($_POST["product_name"])) {
         $errors[] = "Product name is required.";
     }
 
-    // Validate price
+    // validasi price
     if (empty($_POST["price"])) {
         $errors[] = "Price is required.";
     } elseif (!is_numeric($_POST["price"]) || $_POST["price"] <= 0) {
         $errors[] = "Price must be a positive number.";
     }
 
-    // Validate quantity
+    // validasi quantity
     if (empty($_POST["quantity"])) {
         $errors[] = "Quantity is required.";
     } elseif (!is_numeric($_POST["quantity"]) || $_POST["quantity"] < 0) {
         $errors[] = "Quantity must be a non-negative number.";
     }
 
-    // Validate description (description can be empty)
-    if (!empty($_POST["description"]) && strlen($_POST["description"]) > 255) {
+    // validasi description
+    if (empty($_POST["description"])) {
+        $errors[] = "Description is required.";
+    } elseif (!empty($_POST["description"]) && strlen($_POST["description"]) > 255) {
         $errors[] = "Description must be less than 255 characters.";
     }
 
     if (empty($errors)) {
-        // All validations passed
+        // validasi sudah oke semua
         $data = array(
             'product_name' => $_POST['product_name'],
             'price' => $_POST['price'],

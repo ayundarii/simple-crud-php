@@ -15,12 +15,12 @@
             return $this->model->createProduct($data, $table);
         }
 
-        public function getProducts($table) {
-            return $this->model->getProducts($table);
+        public function getProducts($table, $param) {
+            return $this->model->getProducts($table, $param);
         }
 
-        public function getDeletedProducts($table) {
-            return $this->model->getDeletedProducts($table);
+        public function getDeletedProducts($table, $param) {
+            return $this->model->getDeletedProducts($table, $param);
         }
         
         public function getProductById($id, $table) {
@@ -30,17 +30,13 @@
         public function updateProduct($id, $data, $table) {
             return $this->model->updateProduct($id, $data, $table);
         }
-    
-        public function deleteProduct($id, $table) {
-            return $this->model->softDelete($id, $table);
+
+        public function deleteMultipleProducts($ids, $table, $param) {
+            return $this->model->multipleDelete($ids, $table, $param);
         }
 
-        public function deleteMultipleProducts($ids, $table) {
-            return $this->model->multipleDelete($ids, $table);
-        }
-
-        public function restoreData($ids, $table) {
-            return $this->model->restoreData($ids, $table);
+        public function restoreData($ids, $table, $param) {
+            return $this->model->restoreData($ids, $table, $param);
         }
     }
 ?>

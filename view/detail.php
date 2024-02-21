@@ -6,9 +6,19 @@ $id = $_GET['id'];
 
 $productController = new ProductController();
 
-if($id !== null) {
-    $product = $productController->getProductById($id, TABLE_NAME);
-}
+if (empty($id)) {
+    header("Location: ../index.php?message=Product+ID+not+provided.");
+    exit;
+} elseif (!is_numeric($id) || $id <= 0) {
+    header("Location: ../index.php?message=Invalid+Product+ID.");
+    exit;
+} 
+
+$product = $productController->getProductById($id, TABLE_NAME);
+if (!$product) {
+    header("Location: ../index.php?message=Product+not+found.");
+    exit;
+} 
 ?>
 
 <!DOCTYPE html>

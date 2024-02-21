@@ -27,9 +27,9 @@ include PROJECT_ROOT . '/config/config.php';
             }
         }
 
-        public function getProducts($table) {
+        public function getProducts($table, $param) {
             try {
-                $stmt = $this->conn->query("SELECT * FROM $table WHERE is_deleted = 0");
+                $stmt = $this->conn->query("SELECT * FROM $table WHERE $param = 0");
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } catch (PDOException $e) {
                 echo "Error getting product: ".$e->getMessage();
@@ -38,7 +38,7 @@ include PROJECT_ROOT . '/config/config.php';
 
         public function getProductsById($id, $table) {
             try {
-                $stmt = $this->conn->prepare("SELECT id, product_name, price, quantity, description FROM $table WHERE id = :id");
+                $stmt = $this->conn->prepare("SELECT * FROM $table WHERE id = :id");
                 $stmt->bindParam(':id', $id);
                 $stmt->execute();
                 return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -61,10 +61,10 @@ include PROJECT_ROOT . '/config/config.php';
             }
         }
 
-        public function restoreData($listIds, $table){
+        public function restoreData($listIds, $table, $param){
             try {
                 $placeholders = implode(',', array_fill(0, count($listIds), '?'));
-                $stmt = $this->conn->prepare("UPDATE $table SET is_deleted = 0 WHERE id IN ($placeholders)");
+                $stmt = $this->conn->prepare("UPDATE $table SET $param = 0 WHERE id IN ($placeholders)");
                 $stmt->execute($listIds);
                 return true;
             } catch(PDOException $e) {
@@ -73,10 +73,10 @@ include PROJECT_ROOT . '/config/config.php';
             }
         }
 
-        public function multipleDelete($listIds, $table) {
+        public function multipleDelete($listIds, $table, $param) {
             try {
                 $placeholders = implode(',', array_fill(0, count($listIds), '?'));
-                $stmt = $this->conn->prepare("UPDATE $table SET is_deleted = 1 WHERE id IN ($placeholders)");
+                $stmt = $this->conn->prepare("UPDATE $table SET $param = 1 WHERE id IN ($placeholders)");
                 $stmt->execute($listIds);
                 return true;
             } catch(PDOException $e) {
@@ -84,11 +84,24 @@ include PROJECT_ROOT . '/config/config.php';
                 return false;
             }
         }
+
 
         public function update($id, $data, $table) {
             try {
-                $stmt = $this->conn->prepare("UPDATE $table SET product_name = ?, price = ?, quantity = ?, description = ? WHERE id = ?");
-                $stmt->execute([$data['product_name'], $data['price'], $data['quantity'], $data['description'], $id]);
+                $setColumns = '';
+                foreach ($data as $key => $column) {
+                    $setColumns .= "$key=:$key, ";
+                }
+            
+                $setColumns = rtrim($setColumns, ', ');
+                $sql = "UPDATE $table SET $setColumns WHERE id = :id";
+                $stmt = $this->conn->prepare($sql);
+            
+                foreach ($data as $key => $column) {
+                    $stmt->bindValue(":$key", $column);
+                }
+                $stmt->bindParam(":id", $id);
+                $stmt->execute();
                 return true;
             } catch (PDOException $e) {
                 echo "Error: ".$e->getMessage();
@@ -96,30 +109,13 @@ include PROJECT_ROOT . '/config/config.php';
             }
         }
 
-        public function deletedDatas($table){
+        public function deletedDatas($table, $param){
             try {
-                $stmt = $this->conn->query("SELECT * FROM $table WHERE is_deleted = 1");
+                $stmt = $this->conn->query("SELECT * FROM $table WHERE $param = 1");
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } catch (PDOException $e) {
                 echo "Error: ".$e->getMessage();
             }
         }
     }
-
-    // try {
-    //     global $db;
-
-    //     $db = new Database();
-    //     $products = $db->getProducts();
-    //     foreach ($products as $product) {
-    //         echo str_pad($product['product_name'], 20, " ") . " | ";
-    //         echo str_pad($product['price'], 10, " ", STR_PAD_LEFT) . " | ";
-    //         echo str_pad($product['quantity'], 5, " ", STR_PAD_LEFT) . " | ";
-    //         echo $product['description'] . "\n";
-    //         echo str_repeat("-", 50) . "\n";
-    //     }
-    // } catch (PDOException $e) {
-    //     echo "Database connection failed: " . $e->getMessage();
-    //     exit(); 
-    // }
 ?>

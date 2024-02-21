@@ -9,12 +9,12 @@ include PROJECT_ROOT . '/database/database.php';
             $this->db = new Database();
         }
     
-        public function getProducts($table){
-            return $this->db->getProducts($table);
+        public function getProducts($table, $param){
+            return $this->db->getProducts($table, $param);
         }
 
-        public function getDeletedProducts($table){
-            return $this->db->deletedDatas($table);
+        public function getDeletedProducts($table, $param){
+            return $this->db->deletedDatas($table, $param);
         }
         
         public function createProduct($data, $table) {
@@ -29,22 +29,12 @@ include PROJECT_ROOT . '/database/database.php';
             return $this->db->update($id, $data, $table);
         }
 
-        public function multipleDelete($ids, $table) {
-            return $this->db->multipleDelete($ids, $table);
+        public function multipleDelete($ids, $table, $param) {
+            return $this->db->multipleDelete($ids, $table, $param);
         }
 
-        public function restoreData($ids, $table) {
-            return $this->db->restoreData($ids, $table);
+        public function restoreData($ids, $table, $param) {
+            return $this->db->restoreData($ids, $table, $param);
         }
     }
-
-    // $con = new Product($db);
-    // $products = $con->getProducts();
-    //     foreach ($products as $product) {
-    //         echo str_pad($product['product_name'], 20, " ") . " | ";
-    //         echo str_pad($product['price'], 10, " ", STR_PAD_LEFT) . " | ";
-    //         echo str_pad($product['quantity'], 5, " ", STR_PAD_LEFT) . " | ";
-    //         echo $product['description'] . "\n";
-    //         echo str_repeat("-", 50) . "\n";
-    //     }
 ?>
