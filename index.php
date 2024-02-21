@@ -4,7 +4,6 @@ include PROJECT_ROOT . '/controller/productController.php';
 
 $controller = new ProductController();
 $products = $controller->getProducts(TABLE_NAME, 'is_deleted');
-$message = "";
 
 $totalPrice = 0;
 
@@ -19,10 +18,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
         header("Location: index.php?message=Succesfully+deleted+products.");
         exit;
     } else {
-        $message = "Failed to delete products.";
+        header("Location: index.php?message=Failed+to+delete+products.");
     }
 } elseif ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['selected_products'])) {
-    $message = "No products selected for delete."; 
+    header("Location: index.php?message=No+products+selected+for+delete.");
 }
 ?>
 
@@ -52,9 +51,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
     <h2>Product List</h2>
     <a href="view/create.php">Add Product</a>
     <a href="view/deletedData.php">Recover Deleted Products</a>
-    <?php if (!empty($message)) : ?> 
-        <p><?php echo $message; ?></p>
-    <?php endif; ?>
     <?php if (isset($_GET['message'])) : ?> 
         <p><?php echo '<script>alert("'. htmlspecialchars($_GET['message']).'")</script>'; ; ?></p>
     <?php endif; ?>
@@ -94,12 +90,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])){
         <?php endforeach ?>
         <tr>
             <th colspan="4">Total Price</th>
-            <td colspan="1">
+            <td colspan="4">
                 $<?php echo $totalPrice; ?>
             </td>
         </tr>
         <tr>
-            <td colspan="7">
+            <td colspan="8">
                 <button type="submit" class="delete-multiple-button">Delete Selected Products</button>
             </td>
         </tr>
